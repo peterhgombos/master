@@ -1,0 +1,46 @@
+% !TEX encoding = UTF-8 Unicode
+%!TEX root = thesis.tex
+% !TEX spellcheck = en-US
+%%=========================================
+\chapter{Introduction}
+An embedded system is a computer system which is embedded in the devices it controls, and is designed for a dedicated usage.
+Some examples of systems dedicated to a specific purpose are mobile phones, sensors and ATMs.
+The dedication of the system allows the designers to customize the hardware for the specific task.
+However, as the application of the system adds constraints to the system, there must be a balance between the resources added to the system, and what are actually needed.
+For example, there exists batteries that are very powerful, and a handheld device with those would last a long time, but there is an upper limit to how heavy boxes people can carry in their hands.
+Other constraints that are often imposed on the systems are memory size, storage space, maximum operating temperature and physical size.
+
+Power constraints are one of the most prevalent in current embedded systems, as more and more devices are connected to the internet, and regular needs charging.
+But some systems can’t be charged at regular intervals, for example sensor systems in areas that are hard to reach, on the bottom of the sea, embedded in concrete or someplace else; need to be able to function for a long time on a single battery.
+As lower energy use also means lower heat dissipation, better power usage will lead to a cooler system, which is very important in handheld devices like mobile phones. 
+
+In the early days of computing, the way the computers were programmed was with binary code, which is tedious to write, and requires the programmer to remember various arbitrary codes. 
+Quite early, assembly languages were developed, which provides a one to one mapping of easier to remember function names to the machine code.
+While far better for the programmer, assembly programming is still very tedious to write, and when creating a big complex language, the data models the assembler provides are too basic. 
+Virtually all programs written today are written in a high-level programming language, which means they are not a direct mapping of machine functions, but code written in it need to be transformed into something the machine can run. 
+This transformation can happen in two different ways, compilation or interpretation. 
+
+A compiler is a program that takes source code in a given language as input, and outputs code in some other form. 
+This can either be into a lower level language, like assembly, or into another programming language entirely.
+This source-to-source compiling is also known as transcompiling, or simply transpiling.
+The compiled program when run takes the input and produces an output. 
+An interpreter, on the other hand, is a program running the code, and takes the input at the same time and produces the output. See figure.
+
+While compilation and interpretation give a lot of advantages, they do add some overhead while running programs. 
+A perfect compilation will translate the source code into an equivalent with no more instructions than needed, which is impossible except in trivial cases, as high-level languages adds many abstractions that are not easily translated to the basic data models of assembly languages. 
+In the case of interpretation, the interpreter running on the computer by definition adds extra instructions. 
+However, the computer can do things to the source code that are not natural for a programmer, like statistical analysis, which can lead to other optimizations like dead code elimination, loop unrolling etc.
+
+\section{What are some common ways of making a system more energy efficient?}
+
+\section{Earlier work}
+
+\section{Problem}
+As more people learn to program, 
+
+
+Using high-level programming languages on embedded devices is becoming more common place. 
+However, as many applications are very energy sensitive, tall software stacks can add a lot of overhead energy use. 
+In this project I will look at some different programming interfaces for embedded devices and see what energy optimizations the platforms do and the energy implications of them.
+
+\section{What does the platforms do?}
