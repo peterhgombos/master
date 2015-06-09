@@ -5,9 +5,9 @@
 \chapter{Introduction}
 An embedded system is a computer system which is embedded in the devices it controls, and is designed for a dedicated usage.
 Some examples of systems dedicated to a specific purpose are mobile phones, sensors and ATMs.
-The dedication of the system allows the designers to customize the hardware for the specific task.
-However, as the application of the system adds constraints to the system, there must be a balance between the resources added to the system, and what are actually needed.
-For example, there exists batteries that are very powerful, and a handheld device with those would last a long time, but there is an upper limit to how heavy boxes people can carry in their hands.
+By embedding a computer system, the hardware can be specifically tailored for the application of the system.
+The application of the system also adds constraints, and the solutions may contradict other constraints
+In a battery driven system, a really powerful battery that lasts a long time would be better, but the size of the battery might make it no longer suitable for using the system on the move.
 Other constraints that are often imposed on the systems are memory size, storage space, maximum operating temperature and physical size.
 
 Power constraints are one of the most prevalent in current embedded systems, as more and more devices are connected to the internet, and regular needs charging.
@@ -31,16 +31,46 @@ A perfect compilation will translate the source code into an equivalent with no 
 In the case of interpretation, the interpreter running on the computer by definition adds extra instructions. 
 However, the computer can do things to the source code that are not natural for a programmer, like statistical analysis, which can lead to other optimizations like dead code elimination, loop unrolling etc.
 
-\section{What are some common ways of making a system more energy efficient?}
+JavaScript is a dynamic, weakly typed language, originally created for allowing interactivity on web pages.
+Developed in 1995 by Netscape, it became the basis of the ECMAscript standard in 1997. (\cite{jshistory})
+This standardization of JavaScript to work in every browser allowed it to become the most used programming language on the web.
+Currently, almost 90\% of web pages uses JavaScript (\cite{jsclientstats}).
+Newer developments in the JavaScript world is the node.js, later forked into io.js, a stand alone framework for running the V8 engine, allowing for the use of JavaScript on the server side.
+In just three years, JavaScript is now used on 0.2\% of websites for server side code.(\cite{jsserverstats})
 
-\section{Earlier work}
+This dominance of JavaScript on the web has created to a large community around the language, with a lot of tools .
+For some, there is a want to use one language to do everything, and so multiple projects for using JavaScript on embedded platforms have risen.
+In addition to the benefits of a high-level language, there is the added bonus of not having to use time to learn a new programming language when developing for an embedded platform.
+
+\section{What are some common ways of making a system more energy efficient?}
+Look at Jahre's lectures from EEDS.
+
+\section{Related work}
+The first look at how you can optimize software to achieve better energy performance was done by \cite{tiwari94}.
+Before their work, power measurement tools where only available at the circuit and logic level.
+They then introduce a way of estimating the energy cost of the instructions that are available on the processor, by measuring the current into the microprocessor with an ammeter, and a model for estimating the power consumption of a program by looking at the instructions of the program.
+With these data, they can optimize code running on the processor by using a strategy that minimizes the use of power hungry instructions.
+
+In \cite{russell98}, finds that the model developed by \cite{tiwari94} is needlessly detailed, and that the power consumption of a program can be estimated within 8\% accuracy by using the average power consumption per cycle of the processor, multiplied with the execution time in cycles of the program.
+Their conclusion then is that to optimizations that minimize execution time of a program, also reduces the energy consumption of the same program.
+
+\cite{ortiz08} looked at some source code optimizations to find if they would lower the energy consumption, but found that the impact of the techniques varied on the platforms they tested against.
+This device specific optimization was explored further by \cite{delima13}, where the authors try to find a set of compiler optimizations that gives the best result for the program.
+They do this by reducing the number of possible sets of optimizations and test code compiled with the sets of optimizations, finding the set that provides the best performance gain or is most power efficient.
+While their research focuses on a desktop computer, the same could be done for an embedded system.
+
+Kavvadias
 
 \section{Problem}
-As more people learn to program, 
+With high-level programming languages giving many benefits for the programmer, such as a flatter learning curve, better abstractions and better tools for project management, there is a wish of many\textsuperscript{who?} to be able to produce embedded systems in such languages.
+Unfortunately, the addition of more software to run programs negatively affects the power use, as they provide more instructions to run the same program.
+As seen in \cite{kavvadias04}, the energy cost of running a program depends on the number of instructions in the program.
 
 
-Using high-level programming languages on embedded devices is becoming more common place. 
 However, as many applications are very energy sensitive, tall software stacks can add a lot of overhead energy use. 
 In this project I will look at some different programming interfaces for embedded devices and see what energy optimizations the platforms do and the energy implications of them.
 
-\section{What does the platforms do?}
+\section{Outline of this thesis}
+In chapter \ref{ch:chapter2} the method of the experiment is explained, together with the rationale behind the experiment.
+The results of the this experiment is presented in chapter \ref{ch:chapter3}, and these are discussed in chapter \ref{ch:chapter4}.
+Concluding remarks are added in chapter \ref{ch:chapter5}.

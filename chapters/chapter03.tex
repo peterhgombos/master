@@ -3,3 +3,47 @@
 % !TEX spellcheck = en-US
 %%=========================================
 \chapter{Results}
+\label{ch:chapter3}
+
+Voltage running both Raspberry Pi and Tessel on: 5.015 V
+
+Find base power usage.
+
+Timed runs.
+
+\section{Power data of program}
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[timeplot, width=\textwidth]
+ 
+\addplot table[mark=none,x=time,y=value,col sep=comma]{data/addition.csv};
+
+ 
+\end{axis}
+\end{tikzpicture}
+\caption{Addition running in io.js on Raspberry Pi}
+\label{fig:addraspio}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+\begin{axis}[timeplot]
+ 
+\addplot table[mark=none,x=time,y=value,col sep=comma]{data/closure.csv};
+
+ 
+\end{axis}
+\end{tikzpicture}
+\caption{Closure running in Espruino on Raspberry Pi}
+\label{fig:closesp}
+\end{figure}
+
+
+Graph of some runs, show difference between Rasp and Tessel
+
+
+Average power consumptions.
+
+Calculate Watts per instruction.

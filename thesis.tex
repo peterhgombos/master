@@ -6,7 +6,7 @@
 % A line starting with % is a comment. In some cases, I have included a command preceded by a %. You may activate the command by removing the %.
 
 %%===================================
-\documentclass[12pt]{report}
+\documentclass[b5paper,twoside]{memoir}
 \usepackage{ramsstyle}
 %%===================================
 %Write the various parts of your thesis as separate files and include them into the main file by the command \include{name of included file}. When you compile the LaTeX file, you may choose which subfiles to include by the command
@@ -15,12 +15,30 @@
 
 %%===================================
 \begin{document}
+\newcommand*{\fancyreflstlabelprefix}{lst}
+
+\fancyrefaddcaptions{english}{%
+  \providecommand*{\freflstname}{listing}%
+  \providecommand*{\Freflstname}{Listing}%
+}
+
+\frefformat{plain}{\fancyreflstlabelprefix}{\freflstname\fancyrefdefaultspacing#1}
+\Frefformat{plain}{\fancyreflstlabelprefix}{\Freflstname\fancyrefdefaultspacing#1}
+
+\frefformat{vario}{\fancyreflstlabelprefix}{%
+  \freflstname\fancyrefdefaultspacing#1#3%
+}
+\Frefformat{vario}{\fancyreflstlabelprefix}{%
+  \Freflstname\fancyrefdefaultspacing#1#3%
+}
+
 \include{front} % This is the titlepage
 \setcounter{page}{0}
 \pagenumbering{roman}
 \include{preface}
 \include{acknowledgment}
 \include{summary}
+\include{sammendrag}
 \tableofcontents
 \setcounter{page}{0}
 \pagenumbering{arabic}
@@ -37,7 +55,7 @@
 % Include more appendices as required.
 %%=========================================
 \bibliographystyle{apa}
-\addcontentsline{toc}{chapter}{\bibname}
+%\addcontentsline{toc}{chapter}{\bibname}
 \bibliography{refs}  
 %%=========================================
 %%\include{vitae}         % Your curriculum Vitae     
