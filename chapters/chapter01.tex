@@ -62,13 +62,9 @@ While their research focuses on a desktop computer, the same could be done for a
 Kavvadias
 
 \section{Problem}
-With high-level programming languages giving many benefits for the programmer, such as a flatter learning curve, better abstractions and better tools for project management, there is a wish of many\textsuperscript{who?} to be able to produce embedded systems in such languages.
-Unfortunately, the addition of more software to run programs negatively affects the power use, as they provide more instructions to run the same program.
-As seen in \cite{kavvadias04}, the energy cost of running a program depends on the number of instructions in the program.
+To create embedded systems, there’s often a need to use lower level languages, to achieve the desired power and speed requirements. It can be quite hard to program in these languages, with few abstractions and a need for the programmer to do a lot of dirty work. On the other hand, high-level languages offer many improvements for the programmer, as well as a familiar programming environment. Unfortunately, high-level language often mean a high level of energy use. To consolidate these directions, this thesis ask the question: “What are energy efficient ways of bringing high-level programming languages to embedded devices?”
 
-
-However, as many applications are very energy sensitive, tall software stacks can add a lot of overhead energy use. 
-In this project I will look at some different programming interfaces for embedded devices and see what energy optimizations the platforms do and the energy implications of them.
+This will be explored through comparing the energy use of some JavaScript engines, particularly with the Tessel 1, and a Raspberry Pi board running Espruino and io.js, while running benchmark code.
 
 \section{Outline of this thesis}
 In chapter \ref{ch:chapter2} the method of the experiment is explained, together with the rationale behind the experiment.

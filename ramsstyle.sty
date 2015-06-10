@@ -22,14 +22,16 @@
 \linespread{1.5}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\usepgfplotslibrary{external}
-
-\tikzexternalize
+% \usepgfplotslibrary{external}
+\def\removeleadingzeros#1{\if0#1 \expandafter\else#1\fi}
+% \tikzexternalize
 \def\transformtime#1:#2:#3!{
-    \pgfkeys{/pgf/fpu=true,/pgf/fpu/output format=fixed}
-    \pgfmathparse{#1*3600-\pgfkeysvalueof{/pgfplots/timeplot zero}*3600+#2*60+#3}
-    \pgfkeys{/pgf/fpu=false}
+\pgfkeys{/pgf/fpu=true,/pgf/fpu/output format=fixed}
+%\pgfmathparse{#1*3600-\pgfkeysvalueof{/pgfplots/timeplot zero}*3600+#2*60+#3}
+\pgfmathparse{\removeleadingzeros#1*3600-\pgfkeysvalueof{/pgfplots/timeplot zero}*3600+\removeleadingzeros#2*60+\removeleadingzeros#3}
+\pgfkeys{/pgf/fpu=false}
 }
+
 
 \pgfplotsset{
     timeplot zero/.initial=0,
@@ -47,6 +49,25 @@
     xticklabel=\tick
     }
 }
+
+
+
+% \pgfplotsset{
+% timeplot zero/.initial=0,
+% timeplot/.style={
+%     x coord trafo/.code={\expandafter\transformtime##1!},
+%     x coord inv trafo/.code={%
+%         \pgfkeys{/pgf/fpu=true,/pgf/fpu/output format=fixed}
+%         \pgfmathsetmacro\hours{floor(##1/3600)+\pgfkeysvalueof{/pgfplots/timeplot zero}}
+%         \pgfmathsetmacro\minutes{floor((##1-(\hours-\pgfkeysvalueof{/pgfplots/timeplot zero})*3600)/60)}
+%         \pgfmathsetmacro\seconds{##1-floor(##1/60)*60}
+%         \def\pgfmathresult{\pgfmathparse{mod(\hours,60)<10?"0":{},int(mod(\hours,60))}\pgfmathresult:\pgfmathparse{mod(\minutes,60)<10?"0":{},int(mod(\minutes,60))}\pgfmathresult:\pgfmathparse{mod(\seconds,60)<10?"0":{},int(mod(\seconds,60))}\pgfmathresult}
+%         \pgfkeys{/pgf/fpu=false}
+%     },
+% scaled x ticks=false,
+% xticklabel=\tick
+% }
+% }
 
 \newenvironment{remark}{\par\mbox{}\par\noindent{\bfseries \emph{Remark}\/}:\normalfont}{\par}
 \newenvironment{defin}{\par\mbox{}\par\noindent\bfseries \emph{\Pointinghand\ }\normalfont}{\par}

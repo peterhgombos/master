@@ -6,15 +6,17 @@
 \label{ch:chapter2}
 
 
-To fulfill the goal of this thesis, an experiment to compare the energy use of different JavaScript engines was developed. Using a independent power supply, giving a stable voltage, and then measure the current drawn from the hardware platforms while executing programs run in a JavaScript engine. These measurements can be used to find the power used by a single program, and by running the program a large number of times, an average power consumption of the program can be obtained. All of the programs are trivial operations in a loop, and using the average consumption, the energy cost of a single expression in the JavaScript engine can be found.
+To fulfill the goal of this thesis, an experiment to compare the energy use of different JavaScript engines was developed. Using a independent power supply, giving a stable voltage, and then measure the current drawn from the hardware platforms while executing programs run in a JavaScript engine.
+These measurements can be used to find the power used by a single program, and by running the program a large number of times, an average power consumption of the program can be obtained.
+All of the programs are trivial operations in a loop, and using the average consumption, the energy cost of a single expression in the JavaScript engine can be found.
 
-The goal of the experiment is to look at trends in the energy use of the different JavaScript implementations, which means that the exact numbers in the results will not be that interesting. The nature of the experiment then is to rather be approximate than exact.
-
+The goal of the experiment is to look at differences in the energy use of the different JavaScript implementations, which means that it is not the exact numbers that are of interest, but rather the trends that the numbers show.
+For the experiment, this translates to being approximate whenever it is appropriate.
 
 
 \subsection{Programs}
 Four programs were used on each tested platform, all following a similar pattern: In a loop repeated 1,000,000 times, some expression is evaluated.
-This expressions are addition, multiplication, closure and bit shift; testing various JavaScript features.
+The programs are named  are addition, multiplication, closure and bit shift; testing various JavaScript features.
 The addition program can be seen in \fref{lst:add}
 
 
@@ -57,7 +59,7 @@ This means that the Raspberry Pi is able to run much bigger software and do it f
 
 \section{Software Platforms}
 \subsection{Tessel}
-The goal of the Tessel platform is to be an easy way of giving new developers access to hardware programming.
+The goal of the Tessel\footnote{https://tessel.io} platform is to be an easy way of giving new developers access to hardware programming.
 
 One of the rationales behind choosing Lua as the intermediate language (and the Tessel 1 way of running code on a microcontroller) was that Lua has a low memory profile and is generally embeddable.
 At the time, the only choice in JavaScript engine was the V8 engine, and the goal for Tessel was to cater for low energy use.
@@ -69,7 +71,7 @@ In the Tessel stack, the Colony Compiler\footnote{https://github.com/tessel/colo
 Running now on the Tessel is the LuaJIT virtual machine, which is much faster than the standard Lua engine, due to a more efficient design. While there was a goal to enable the just-in-time compilation, the developers of Tessel has since decided that some of the goals of the project can’t be reconciled with a real low power usage, and the next version of Tessel will run node/io.js.(\cite{movingfaster})
 
 \subsection{Espruino}
-Espruino has, in addition to the goal of Tessel to bring hardware to new people, also the goal of doing it as efficient as possible.
+Espruino\footnote{http://www.espruino.com/} has, in addition to the goal of Tessel to bring hardware to new people, also the goal of doing it as efficient as possible.
 The implementation is targeted to devices with memory as small as 128kB Flash and 8kB RAM, way less than both hardware platforms that are used in this experiment provides.
 To achieve this goal, a number of tradeofs has been done to the implementation.
 
@@ -85,7 +87,7 @@ Adding some middleware to optimize code before running it on the Espruino could 
 
 
 \subsection{io.js/node.js}
-Node.js is developed to run JavaScript on computers, using the V8 Engine, found in browsers such as Google Chrome.
+Node.js/io.js\footnote{https://iojs.org} is developed to run JavaScript on computers, using the V8 Engine, found in browsers such as Google Chrome.
 As the normal running environments for Node are not restricted on energy, the platform is optimized for speed.
 This does not mean that the platform is power hungry, as speed optimizations might lead to better energy efficiency as well.
 In fact, Technical Machine has announced that they will use io.js for the Tessel 2, that will release in the fall of 2015.(\cite{movingfaster})
@@ -96,9 +98,12 @@ While this brings a bit of terminology problems in this thesis, when either io.j
 
 
 \subsection{Linux}
-To run programs on the Raspberry Pi, an operating system is needed.
+To run programs on the Raspberry Pi, an operating system is needed, 
+The Raspbian OS, based on the Debian Linux distribution, 
+
 Provided with the Raspberry Pi is the Raspbian OS, based on the Debian Linux distribution.
-As the Raspberry Pi
+
+
 % http://sjoerd.luon.net/posts/2015/02/debian-jessie-on-rpi2/
 
 
@@ -138,8 +143,9 @@ Another way of doing it could have been to create an USB cable with only data wi
 The Benchvue Software can export the measurement data in CSV format, in two columns with time stamp and the sampled data at that time stamp.
 These files were read in a Python program, which did the manipulations needed on the data.
 
+To find the average power consumption of every run on Raspberry Pi, the fact that the current drawn while it was sleeping was always under 0.39 m/micro A, and always above when the program was running, was exploited. 
+Stripping away everything under this threshold, and splitting this stream up into blocks of as many samples as the average program contains, the energy consumed by each program in the run can be added up to. 
+The average of these sums is then the average power usage of one experiment.
 
-To find the average power consumption of every run on Raspberry Pi, the fact that the current drawn while it was sleeping was always under 0.39 m/micro A, and always above when the program was running, was exploited. Stripping away everything under this threshold, and splitting this stream up into blocks of as many samples as the average program contains, the energy consumed by each program in the run can be added up to. The average of these sums is then the average power usage of one experiment.
-
-The Tessel data was not as easy to manipulate, as the board reset procedure is not as clear when it begins and ends from the current data. To get a similar data set to work on as from the Raspberry Pi, as many samples as go into the board reset is removed after the number of samples of the average program is removed. 
+The Tessel data was not as easy to manipulate, as the board reset procedure is not as clear when it begins and ends from the current data. To get a similar data set to work on as from the Raspberry Pi, as many samples as go into the board reset is removed after the number of samples of the average program is    removed.
 

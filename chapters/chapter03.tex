@@ -9,36 +9,66 @@ Voltage running both Raspberry Pi and Tessel on: 5.015 V
 
 Find base power usage.
 
-Timed runs.
-
-\section{Power data of program}
-\begin{figure}[ht]
+\section{Program time}
+In \fref{tab:timedruns}, the approximate times of running the programs are gathered.
+\begin{table}[h]
 \centering
-\begin{tikzpicture}
-\begin{axis}[timeplot, width=\textwidth]
+\begin{tabular}{| c | c | c | c | c |}
+ \hline
+ & Addition & Multiplication & Shift & Closure \\ \hline
+ Espruino &  0m 48s & 0m 48s & 0m 49s & 1m 19s \\ \hline
+ io.js  & 0m 3s & 0m 3s & 0m 3s & 0m 4s \\ \hline
+ Tessel & 0m 19s & 0m 19s & 6m 12s & 2m 17s\\ \hline
  
-\addplot table[mark=none,x=time,y=value,col sep=comma]{data/addition.csv};
+\end{tabular}
+\caption{Approximate time of each program}
+\label{tab:timedruns}
+\end{table}
+
+
+
+% \section{Power data of program}
+% \begin{figure}[h!]
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[timeplot]
+ 
+% \addplot table[mark=none,x=time,y=value,col sep=comma]{data/additioniojs_two.csv};
 
  
-\end{axis}
-\end{tikzpicture}
-\caption{Addition running in io.js on Raspberry Pi}
-\label{fig:addraspio}
-\end{figure}
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Addition running in io.js on Raspberry Pi}
+% \label{fig:addraspio}
+% \end{figure}
 
-\begin{figure}[ht]
-\centering
-\begin{tikzpicture}
-\begin{axis}[timeplot]
+% \begin{figure}[ht]
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[timeplot]
  
-\addplot table[mark=none,x=time,y=value,col sep=comma]{data/closure.csv};
+% \addplot table[mark=none,x=time,y=value,col sep=comma]{data/closureespruino_one.csv};
 
  
-\end{axis}
-\end{tikzpicture}
-\caption{Closure running in Espruino on Raspberry Pi}
-\label{fig:closesp}
-\end{figure}
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Closure running in Espruino on Raspberry Pi}
+% \label{fig:closesp}
+% \end{figure}
+
+% \begin{figure}[ht]
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[timeplot]
+ 
+% \addplot table[mark=none,x=time,y=value,col sep=comma]{data/shifttessel_one.csv};
+
+ 
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Shift running on the Tessel 1}
+% \label{fig:shifttes}
+% \end{figure}
 
 
 Graph of some runs, show difference between Rasp and Tessel
