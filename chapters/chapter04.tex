@@ -2,21 +2,78 @@
 %!TEX root = thesis.tex
 % !TEX spellcheck = en-US
 %%=========================================
-\chapter{Discussion}
+\chapter{Results}
 \label{ch:chapter4}
 
-Problems with some hardware platforms - bad documentation.
+Voltage running both Raspberry Pi and Tessel on: 5.015 V
 
-Had to edit data, because logging over noon or midnight provided bugs. 24-hour clocks are best!
+Find base power usage.
 
-Energy difference measured.
+\section{Program time}
+In \fref{tab:timedruns}, the approximate times of running the programs are gathered.
+\begin{table}[h]
+\centering
+\begin{tabular}{| c | c | c | c | c |}
+ \hline
+ & Addition & Multiplication & Shift & Closure \\ \hline
+ Espruino &  0m 48s & 0m 48s & 0m 49s & 1m 19s \\ \hline
+ io.js  & 0m 3s & 0m 3s & 0m 3s & 0m 4s \\ \hline
+ Tessel & 0m 19s & 0m 19s & 6m 12s & 2m 17s\\ \hline
+ 
+\end{tabular}
+\caption{Approximate time of each program}
+\label{tab:timedruns}
+\end{table}
 
-What does the speed do? Would just optimizing for speed hold up?
-What is the size requirement of io.js?
 
 
-Shift, tessel - why does it run so slow? Lua translation.
+% \section{Power data of program}
+% \begin{figure}[h!]
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[timeplot]
+ 
+% \addplot table[mark=none,x=time,y=value,col sep=comma]{data/additioniojs_two.csv};
 
-What amount of the measured power draw is from the platform. What also draws power? (wifi tessel, network raspberry pi)
+ 
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Addition running in io.js on Raspberry Pi}
+% \label{fig:addraspio}
+% \end{figure}
 
-Variance?
+% \begin{figure}[ht]
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[timeplot]
+ 
+% \addplot table[mark=none,x=time,y=value,col sep=comma]{data/closureespruino_one.csv};
+
+ 
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Closure running in Espruino on Raspberry Pi}
+% \label{fig:closesp}
+% \end{figure}
+
+% \begin{figure}[ht]
+% \centering
+% \begin{tikzpicture}
+% \begin{axis}[timeplot]
+ 
+% \addplot table[mark=none,x=time,y=value,col sep=comma]{data/shifttessel_one.csv};
+
+ 
+% \end{axis}
+% \end{tikzpicture}
+% \caption{Shift running on the Tessel 1}
+% \label{fig:shifttes}
+% \end{figure}
+
+
+Graph of some runs, show difference between Rasp and Tessel
+
+
+Average power consumptions.
+
+Calculate Watts per instruction.
