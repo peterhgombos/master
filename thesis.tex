@@ -41,10 +41,10 @@
 \include{acknowledgment}
 \include{summary}
 \include{sammendrag}
+\todo{might want to consider float, subplot, }
+\todo{use natbib citations all around}
 \listoftodos
 \tableofcontents
-\setcounter{page}{0}
-\pagenumbering{arabic}
 \include{chapters/chapter01}
 \include{chapters/chapter02}
 \include{chapters/chapter03}
@@ -59,11 +59,12 @@
 % Include more appendices as required.
 %%=========================================
 \bibliographystyle{apa}
-%\addcontentsline{toc}{chapter}{\bibname}
+% \addcontentsline{toc}{chapter}{\bibname}
 \bibliography{refs}  
+% \printbibliography
 %%=========================================
 %%\include{vitae}         % Your curriculum Vitae     
 %%=============================================
-
+\todo{remove nocite}
 \nocite{*}
 \end{document}

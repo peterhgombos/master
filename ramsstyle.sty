@@ -6,9 +6,12 @@
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{rotating}
 \usepackage{amsmath}
-\usepackage{booktabs}
 \usepackage{url}
+
 \usepackage{natbib}
+% \usepackage[english]{babel}
+% \usepackage[natbib=true,backend=bibtex,style=apa]{biblatex}
+% \bibliography{refs.bib}
 \usepackage{color}
 % save memoir's meaning of \fref as \figref:
   \let\figref\fref
@@ -16,98 +19,34 @@
   \let\fref\relax
 % load fancyref
 \usepackage{fancyref}
-%\usepackage[numbers]{natbib} % Use this command if you want to refer to the literature by numbers, e.g., [1]
+
 \usepackage{setspace}
-\usepackage{listings}
+\usepackage[chapter]{minted}
+\usemintedstyle{tango}
+\usepackage[compatibility=false]{caption}
+
 \usepackage{todonotes}
 \linespread{1.5}
+\usepackage{booktabs}
+\usepackage{colortbl}
 \usepackage{tikz}
-\usepackage{pgfplots}
-% \usepgfplotslibrary{external}
-\def\removeleadingzeros#1{\if0#1 \expandafter\else#1\fi}
-% \tikzexternalize
-\def\transformtime#1:#2:#3!{
-\pgfkeys{/pgf/fpu=true,/pgf/fpu/output format=fixed}
-%\pgfmathparse{#1*3600-\pgfkeysvalueof{/pgfplots/timeplot zero}*3600+#2*60+#3}
-\pgfmathparse{\removeleadingzeros#1*3600-\pgfkeysvalueof{/pgfplots/timeplot zero}*3600+\removeleadingzeros#2*60+\removeleadingzeros#3}
-\pgfkeys{/pgf/fpu=false}
-}
+\usepackage{siunitx}
+\usepackage{array}
+\usepackage{parcolumns}
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist 
 
 
-\pgfplotsset{
-    timeplot zero/.initial=0,
-    timeplot/.style={
-        x coord trafo/.code={\expandafter\transformtime##1!},
-        x coord inv trafo/.code={%
-            \pgfkeys{/pgf/fpu=true,/pgf/fpu/output format=fixed}
-            \pgfmathsetmacro\hours{floor(##1/3600)+\pgfkeysvalueof{/pgfplots/timeplot zero}}
-            \pgfmathsetmacro\minutes{floor((##1-(\hours-\pgfkeysvalueof{/pgfplots/timeplot zero})*3600)/60)}
-            \pgfmathsetmacro\seconds{##1-floor(##1/60)*60}
-            \def\pgfmathresult{\pgfmathprintnumber{\hours}:\pgfmathprintnumber{\minutes}:\pgfmathprintnumber[fixed zerofill]{\seconds}}
-            \pgfkeys{/pgf/fpu=false}
-        },
-    scaled x ticks=false,
-    xticklabel=\tick
-    }
-}
-
-
-
-% \pgfplotsset{
-% timeplot zero/.initial=0,
-% timeplot/.style={
-%     x coord trafo/.code={\expandafter\transformtime##1!},
-%     x coord inv trafo/.code={%
-%         \pgfkeys{/pgf/fpu=true,/pgf/fpu/output format=fixed}
-%         \pgfmathsetmacro\hours{floor(##1/3600)+\pgfkeysvalueof{/pgfplots/timeplot zero}}
-%         \pgfmathsetmacro\minutes{floor((##1-(\hours-\pgfkeysvalueof{/pgfplots/timeplot zero})*3600)/60)}
-%         \pgfmathsetmacro\seconds{##1-floor(##1/60)*60}
-%         \def\pgfmathresult{\pgfmathparse{mod(\hours,60)<10?"0":{},int(mod(\hours,60))}\pgfmathresult:\pgfmathparse{mod(\minutes,60)<10?"0":{},int(mod(\minutes,60))}\pgfmathresult:\pgfmathparse{mod(\seconds,60)<10?"0":{},int(mod(\seconds,60))}\pgfmathresult}
-%         \pgfkeys{/pgf/fpu=false}
-%     },
-% scaled x ticks=false,
-% xticklabel=\tick
-% }
-% }
 
 \newenvironment{remark}{\par\mbox{}\par\noindent{\bfseries \emph{Remark}\/}:\normalfont}{\par}
 \newenvironment{defin}{\par\mbox{}\par\noindent\bfseries \emph{\Pointinghand\ }\normalfont}{\par}
 \setcounter{tocdepth}{2} 
-\usepackage[colorlinks=true, a4paper=true, pdfstartview=FitV,
+\usepackage[colorlinks=false, a4paper=true, pdfstartview=FitV,
 linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
 \pdfcompresslevel=9
 
 \definecolor{lightgray}{rgb}{.9,.9,.9}
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
-\lstdefinelanguage{JavaScript}{
-  keywords={break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with},
-  morecomment=[l]{//},
-  morecomment=[s]{/*}{*/},
-  morestring=[b]',
-  morestring=[b]",
-  ndkeywords={class, export, boolean, throw, implements, import, this},
-  keywordstyle=\color{blue}\bfseries,
-  ndkeywordstyle=\color{darkgray}\bfseries,
-  identifierstyle=\color{black},
-  commentstyle=\color{purple}\ttfamily,
-  stringstyle=\color{red}\ttfamily,
-  sensitive=true
-}
 
-\lstset{
-   language=JavaScript,
-   backgroundcolor=\color{lightgray},
-   extendedchars=true,
-   basicstyle=\footnotesize\ttfamily,
-   showstringspaces=false,
-   showspaces=false,
-   numbers=left,
-   numberstyle=\footnotesize,
-   numbersep=9pt,
-   tabsize=2,
-   breaklines=true,
-   showtabs=false,
-   captionpos=b
-}
-
+\chapterstyle{ell}

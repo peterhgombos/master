@@ -3,77 +3,129 @@
 % !TEX spellcheck = en-US
 %%=========================================
 \chapter{Introduction}
-An embedded system is a computer system which is embedded in the devices it controls, and is designed for a dedicated usage.
-Some examples of systems dedicated to a specific purpose are mobile phones, sensors and ATMs.
-By embedding a computer system, the hardware can be specifically tailored for the application of the system.
-The application of the system also adds constraints, and the solutions may contradict other constraints
-In a battery driven system, a really powerful battery that lasts a long time would be better, but the size of the battery might make it no longer suitable for using the system on the move.
-\todo{Find a big ass battery}
-Other constraints that are often imposed on the systems are memory size, storage space, maximum operating temperature and physical size. (\cite{computercomponents} \cite{embeddsystems}
+\setcounter{page}{0}
+\pagenumbering{arabic}
+\defcitealias{teslatest}{2013 Tesla Model S Review, Car and Driver}
 
-Power constraints are one of the most prevalent in current embedded systems, as more and more devices are connected to the Internet, and regular needs charging.
-But some systems can’t be charged at regular intervals, for example sensor systems in areas that are hard to reach, on the bottom of the sea, embedded in concrete or someplace else; need to be able to function for a long time on a single battery.
-As lower energy use also means lower heat dissipation, better power usage will lead to a cooler system, which is very important in handheld devices like mobile phones. 
+Energy consumption in embedded computer systems is a topic with increased importance as the use of such systems has exploded in recent years. 
+This is in many ways driven by the concept of the \emph{Internet of Things}, connecting some physical device to the Internet, allowing it to be remotely controled, and to add other functionality that an isolated system can not have.\citep{internetofthings}
+Embedded systems allow the development process to tailor both hardware and software to the application, making the system not a general programmable computer.
+Despite the advantages this gives for the application, such as specific optimizations, this makes it harder to develop a system, as there is no common platform.
+Additionally, an embedded system designer need to be knowledgeable in both the software and hardware domain, and developing both will add time to the development of the device.
 
-In the early days of computing\todo{edit cliche}, the way the computers were programmed was with binary code, which is tedious to write, and requires the programmer to remember various arbitrary codes. 
-Quite early\todo{when}, assembly languages were developed, which provides a one-to-one mapping of easier to remember function names to the machine code.
-While far better for the programmer, assembly programming is still very time consuming and difficult to write, and when creating a big complex language, the data models the assembler provides are too basic. 
-Virtually all programs written today are written in a high-level programming language, which means they are not a direct mapping of machine functions, but code written in it need to be transformed into something the machine can run. 
-This transformation can happen in two different ways, compilation or interpretation. 
+A solution to these problems is to use more generalized hardware, and use software abstractions to ease the development.
+But this gives away a lot of the low level control over the device, losing the possibilities for many optimizations, and adds overhead to the execution process.
+As an attempt to consolidate these two competing impulses when developing an embedded application, this work will try to investigate the energy consumption of using high-level programming languages on embedded devices.
+Specifically, the use of JavaScript as the development language on different software and hardware platforms is investigated.
 
-A compiler is a program that takes source code in a given language as input, and outputs code in some other form. 
-This can either be into a lower level language, like assembly, or into another programming language entirely.
+\section{Embedded devices}
+So what exactly is an embedded computer system?
+In \cite{computercomponents}, it is defined as ``any device that includes a programmable computer but is not itself intended to be a general-purpose computer'', and \cite{embeddsystems} says they are ``the integration of a (microelectronic) system and its software into a larger, often autonomous, system that often monitors and/or controls equipment without the need for manual intervention.''
+From these definitions, it can therefore be understood that an embedded system is a programmable computer that interacts in some way with the physical world in a device specific application.
+Embedded systems range from ABS brakes in a car to cell phones.
+
+When designing an embedded computer system, the resources can be specifically tailored to the application of the system.
+For example, using Bluetooth is popular for communication to embedded systems, but if the application does not require wireless communication, there is no need to add Bluetooth capabilities in the design.
+This applies to every part of the system, requiring the designer of the system to balance contradicting constraints and needs.
+In a battery driven system, a really powerful battery that lasts a long time would be optimal, but the size of the battery will limit the systems' usability.
+For example, the battery used by the Tesla Model S is able to power the car for almost 430 km.
+A similar battery used in a cell phone would last for a long time, but as the battery weighs nearly 600 kg, it would be impractical.\citepalias{teslatest}
+Other constraints that are often imposed on the systems are memory size, storage space, maximum operating temperature and deadlines for delivering data.
+
+Power consumption is a constraint that is especially important in embedded systems, in a way that is not relevant in some other computer systems, like desktop machines.
+A battery powered device needs to keep functioning for the longest time possible on a single charge.
+But some systems cannot even be charged at regular intervals, for example sensor systems in areas that are hard to reach, at the bottom of the sea, embedded in concrete or someplace else; need to be able to function for a long time on a single battery.
+As lower energy use also means lower heat dissipation, better energy efficiency will lead to a cooler system, which is very important in hand-held devices like mobile phones.
+
+\section{Compilation and interpretation}
+When computers were first introduced, they were programmed manually with binary code, which is tedious to write, and requires the programmer to remember various arbitrary codes.
+To combat this, assembly languages were developed, the first already in 1949 with further developments through the 1950s, which provides a one-to-one mapping of easier to remember function names to the machine code.\citep{Salomon:1992:AL:152201}
+While far better for the programmer, assembly programming is still very time consuming and difficult to write, and when creating a complex language, the data models the assembler provides are too basic.
+Virtually all programs written today are written in a high-level programming language, which means they are not a direct mapping of machine functions, but the code written in it needs to be transformed into a format that the machine can run.\cite{dragon} 
+This transformation be done in two different ways, compilation or interpretation. 
+
+Compilers takes source code in a given language as input, and outputs code in another form. This can either be into a lower level language, like assembly, or into another programming language entirely.
 This source-to-source compiling is also known as transcompiling, or simply transpiling.
 The compiled program when run takes the input and produces an output. 
-An interpreter, on the other hand, is a program running the code, and takes the input at the same time and produces the output.
+An interpreter, on the other hand, is a program running the code while at the same time taking any input, and then produces the output.
 \missingfigure{Overview of compiler and interpreter }
 
-While compilation and interpretation give a lot of advantages, they do add some overhead while running programs. 
-A perfect compilation\todo{some other term} will translate the source code into an equivalent with no more instructions than needed, which is impossible except in trivial cases, as high-level languages adds many abstractions that are not easily translated to the basic data models of assembly languages. 
+While compilation and interpretation give a lot of advantages over writing programs in assembly language, they do add some overhead while running programs.
+When compiling anything but a trivial program, there is a huge amount of correct outputs that can be produced, as there is many ways of implementing abstractions in a lower language.
+This means that there will most likely be added more instructions after a compiler pass compared to writing the assembly code by hand.
 In the case of interpretation, the interpreter running on the computer by definition adds extra instructions. 
-\todo{Remove however}However, the computer can do things to the source code that are not natural for a programmer, like statistical analysis, which can lead to other optimizations like dead code elimination, loop unrolling etc.\todo{What are these? Some other place}
+On the other hand, adding automated passes of the code allows for some optimization techniques.
+These will be explored in \fref{chap:chapter2}
 
+\section{JavaScript}
+\todo{citealias}
 JavaScript is a dynamic, weakly typed language, originally created for allowing interactivity on web pages.
-Developed in 1995 by Netscape, it became the basis of the ECMAscript standard in 1997. (\cite{jshistory})
-This standardization of JavaScript to work in every browser allowed it to become the most used programming language on the web.
+Developed in 1995 by Netscape, it became the basis of the ECMAScript standard in 1997. (\cite{jshistory})
+This standardization of JavaScript allowed it to become the most used programming language on the web, by being available in every browser.
 Currently, almost 90\% of web pages uses JavaScript (\cite{jsclientstats}).
-Newer developments in the JavaScript world is the node.js, later forked into io.js, a stand alone framework for running the V8 engine, allowing for the use of JavaScript on the server side.
-In just three years, JavaScript is now used on 0.2\% of websites for server side code.(\cite{jsserverstats})
+Newer developments in the JavaScript world is Node.js, later forked into io.js, a standalone framework for running the V8 engine, allowing for the use of JavaScript on the server side.
+Just three years after it was introduced, JavaScript is now used on 0.2\% of websites for server side code.(\cite{jsserverstats})
 
-This dominance of JavaScript on the web has created to a large community around the language, with a lot of tools .\todo{show community - npm?}
-For some, there is a want to use one language to do everything, and so multiple projects for using JavaScript on embedded platforms have risen.\todo{"For some, there is a want" - bad sentence}
-In addition to the benefits of a high-level language, there is the added bonus of not having to use time to learn a new programming language when developing for an embedded platform.
-
-
-
-\section{Related work}
-The first look at how you can optimize software to achieve better energy performance was done by \cite{tiwari94}.
-Before their work, power measurement tools where only available at the circuit and logic level.
-They then introduce a way of estimating the energy cost of the instructions that are available on the processor, by measuring the current into the microprocessor with an ammeter, and a model for estimating the power consumption of a program by looking at the instructions of the program.
-With these data, they can optimize code running on the processor by using a strategy that minimizes the use of power hungry instructions.
-
-In \cite{russell98}, finds that the model developed by \cite{tiwari94} is needlessly detailed, and that the power consumption of a program can be estimated within 8\% accuracy by using the average power consumption per cycle of the processor, multiplied with the execution time in cycles of the program.
-Their conclusion then is that to optimizations that minimize execution time of a program, also reduces the energy consumption of the same program.
-
-\cite{ortiz08} looked at some source code optimizations to find if they would lower the energy consumption, but found that the impact of the techniques varied on the platforms they tested against.
-This device specific optimization was explored further by \cite{delima13}, where the authors try to find a set of compiler optimizations that gives the best result for the program.
-They do this by reducing the number of possible sets of optimizations and test code compiled with the sets of optimizations, finding the set that provides the best performance gain or is most power efficient.
-While their research focuses on a desktop computer, the same could be done for an embedded system.
-
-\todo{Write about Kavvadias}
-\todo{More literature}
+This dominance of JavaScript on the web has created to a large community around the language, with a lot of tools and available open source software.
+In NPM, the Node Package Manager, over 150,000 JavaScript packages are available to download. \footnote{https://www.npmjs.com/}
+As more people are using JavaScript, there is a drive to expand its areas of deployment, and how it can be used.
+This can be seen through the number of different projects with the aim of running JavaScript directly on hardware.
+In addition to the benefits of being a high-level language, there is also the bonus for the developer not to have to learn a new programming language when developing for an embedded platform.
 
 \section{Problem}
-To create embedded systems, there’s often a need to use lower level languages, to 
-achieve the desired power and speed requirements.
-It can be quite hard to program in these languages, with few abstractions and a need for the programmer to do a lot of dirty work.
+To create embedded systems, there’s often a need to use lower level languages to achieve the desired power and speed requirements.
+It can be quite hard to program in these languages, with few abstractions and a hard to understand data model.
 On the other hand, high-level languages offer many improvements for the programmer, as well as a familiar programming environment.
 Unfortunately, high-level language often mean a high level of energy use.
-To consolidate these directions, this thesis ask the question: “What are energy efficient ways of bringing high-level programming languages to embedded devices?”
+To consolidate these directions, this thesis asks: 
+\begin{quote}
+``What are energy efficient ways of bringing high-level programming languages to embedded devices?''
+\end{quote}
 
 This will be explored through comparing the energy use of some JavaScript engines, particularly with the Tessel 1, and a Raspberry Pi board running Espruino and io.js, while running benchmark code.
 
+
+\section{Related work}
+The first look at how you can optimize software to achieve better energy performance was done by \citet{tiwari94}.
+Before their work, power measurement tools where only available at the circuit and logic level.
+They then introduced a way of estimating the energy cost of the instructions that are available on the processor, by measuring the current flow into the microprocessor with an ampere meter.
+Also introduced were a model for estimating the power consumption of a program by looking at the instructions of the program.
+With this data, they could optimize code running on the processor by using a strategy that minimizes the use of power hungry instructions.
+
+\citet{russell98}, find that the model developed by \citeauthor{tiwari94} is needlessly detailed, and that the power consumption of a program can be estimated within 8\% accuracy by using the average power consumption per cycle of the processor, multiplied with the execution time in cycles of the program.
+Their conclusion is that adding optimizations that minimize execution time of a program, will also reduce the energy consumption of the same program.
+
+\citet{ortiz08} looked at some source code optimizations to find if they could lower the energy consumption, but found that the impact of the techniques varied on the platforms they tested against.
+This device specific optimization was explored further by \citet{delima13}, where the authors tried to find a set of compiler optimizations that give the best result for the given program.
+They did this by reducing the number of possible sets of optimizations, and then tested code compiled with the sets of optimizations, finding the set that provides the best performance gain or is most power efficient.
+While their research focused on a desktop computer, the same could be done for an embedded system.
+
+\citet{kavvadias04} found that they could estimate the energy use of a program by using the base cost of each instruction.
+The model they developed shows that the energy use is dependent on the instruction energy use, the interinstruction costs for each instruction pair, and the costs of pipeline stalls.
+
+\begin{equation}
+PE = \sum_{1}^{n}E_{i} + \sum_{1}^{n-1}O_{i,i+1} + \sum\epsilon
+\label{eq:kavvadiasmodel}
+\end{equation}
+
+Shown in \fref{eq:kavvadiasmodel}, where $E_i$ is the energy consumed during the execution of instruction i, $O_{i,j}$ is the interinstruction cost of instructions i and j, and $\epsilon$ is the cost of a pipeline stall.
+This shows that reducing either the number of pipeline stalls or the number of instructions in the program will reduce the energy consumed by the program.
+
+In other research done in the same field, \citet{valluri01} found that compiler optimizations done for speed positively affected energy use.
+Specifically, reducing the number of instructions that the processor needs to execute, reduces energy use.
+Some optimizations that the research found favorable for energy use, was loop unrolling and function inlining.
+
+\citet{fortunaanderson2010} found promising results in trying to parallelize JavaScript programs running on the web.
+In the design, JavaScript is inherently single-threaded, which might lead to bottlenecks during execution.
+While the hardware platforms tested in this thesis does not support parallel execution, there might be possible to use some of the techniques in the paper to achieve better performance on future devices.
+
+
+
+%\todo{More literature}
+
+
 \section{Outline of this thesis}
-In chapter \ref{ch:chapter2} the method of the experiment is explained, together with the rationale behind the experiment.
-The results of the this experiment is presented in chapter \ref{ch:chapter3}, and these are discussed in chapter \ref{ch:chapter4}.
-Concluding remarks are added in chapter \ref{ch:chapter5}.
+Chapter \ref{chap:chapter2} (page \pageref{chap:chapter2}) goes deeper into what can be done to create an energy efficient embedded device.
+In chapter \ref{chap:chapter3} (page \pageref{chap:chapter3}) the method of the experiment is explained, together with the rationale behind the experiment.
+The results of the this experiment is presented in chapter \ref{chap:chapter4} (page \pageref{chap:chapter4}), and these are discussed in chapter \ref{chap:chapter5} (page \pageref{chap:chapter5}).
+Concluding remarks are added in chapter \ref{chap:chapter6} (page \pageref{chap:chapter6}).

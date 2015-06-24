@@ -3,7 +3,37 @@
 % !TEX spellcheck = en-US
 %%=========================================
 \chapter{Conclusion}
-\label{ch:chapter6}
+\label{chap:chapter6}
 
+The tessel compiler can be optimized.
+
+Code need to be tailored to Espruino
+
+Focus on speed in implementations
+
+Energy can be saved by improving the OS.
 
 \section{Future work}
+Run more tests with more instructions.
+
+Run similar tests with more advanced programs.
+
+Test tessel 2 when it comes out.
+
+Test on Raspberry Pi 2
+
+Run optimized benchmarks as laid out in \fref{sec:benchmarkdiscussion}
+
+\subsection{Experiment automation on the Tessel}
+Another way of automating the experiments on the Tessel than what was done, would be to connect it to a computer using another modified USB cable.
+A USB cable carries it signal through four cable, two are for Vcc and ground, while the last two are for the data connection.
+(There actually is a fifth cable in newer cables that can be used for control, but it is optional.)
+There should be no problem in powering the device from an external power supply, as done in the experiment, and at the same time delivering data from a computer.
+
+The benefits of this, is to get the same control over the programs run as through the shell of the Raspberry Pi.
+This would remove the need for resetting the Tessel from the software itself, making it easier to see where the program runs in the sample data.
+
+\todo{cite usb docs}However, there is no guarantee for this to work, as it is undocumented in the specification.
+There should be no connection between the power and data lines when using a USB cable, but implementations might vary.
+This needs to be tested to be done, and because of timing limitations in this project, the solution described in \fref{chap:chapter3} was decided to be good enough.
+

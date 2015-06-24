@@ -3,23 +3,292 @@
 % !TEX spellcheck = en-US
 %%=========================================
 \chapter{Discussion}
-\label{ch:chapter5}
+\label{chap:chapter5}
+In this chapter the results shown in the last chapter are discussed, along with issues that arise with the method.
 
-Problems with some hardware platforms - bad documentation.
+\section{The benchmarks}
+\label{sec:benchmarkdiscussion}
+The benchmarks in the experiment were chosen to test some JavaScript features, in a way that mimics the work done by \citeauthor{tiwari94} But instead of just testing one instruction, a whole expression is used. 
+This is especially clear in the Closure program, as a function definition and call uses many instructions in an assembly implementation.
+But also the other programs contains more than the simple operation, with the variable usage translating into memory accesses.
 
-Had to edit data, because logging over noon or midnight provided bugs. 24-hour clocks are best!
+An optimizing compiler should be able to reduce the number of instructions in all of the programs.
+By using constant folding, the variable lookup in each of the operations could be removed.
+After this constant folding, the compiler could find that the operation itself is identical in every iteration of the loop, and the calculation could be done a single time before the loop starts.
+The operation in the loop would then simply become a variable declaration.
+In the Closure program, the function could be inlined, resulting the operation to also being a simple variable declaration.
 
-Energy difference measured.
+\section{Comparison between the platforms}
+This section compares the results of the different platforms, through the running times of the programs, the values found per sample and the calculated per iteration results.
 
-What does the speed do? Would just optimizing for speed hold up?
-What is the size requirement of io.js?
+\subsection{Running time}
+Execution time on the Raspberry Pi is 3.89 times faster than on the Tessel, as the Raspberry Pi's clock runs that much faster.
+Adjusting \fref{tab:timedruns} for this, the conjectured running times of the programs on the Tessel if the hardware was as powerful as the Raspberry Pi are shown in \fref{tab:fixedtimes}.
+As can be seen, the Tessel speed of the Addition and Multiplication program is comparable with the io.js version.
+\Fref{lst:multtrans} shows that the JavaScript operation is translated directly to the equivalent Lua operation, making the program run very efficient.
+The reason for the huge performance loss in the shift program is described in \fref{sec:shifttessel}.
 
-\section{Espruino slow}
-As Espruino executes source code directly
+The Closure program uses a longer time on each platform, due to a function not being represented by a single instruction.
+As the V8 engine behind io.js includes JIT compilation, a lot of the extra work that a closure needs can be optimized.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ c  c  c  c  c }
+ & Addition & Multiplication & Shift & Closure \\
+ \rowcolor[gray]{.9}
+ Espruino & 48 \si{\second} & 48 \si{\second} & 49 \si{\second} & 79 \si{\second} \\ 
+ \rowcolor[gray]{.5}
+ io.js  & 3 \si{\second} & 3 \si{\second} & 3 \si{\second} & 4 \si{\second} \\ 
+ \rowcolor[gray]{.9}
+ Tessel & 4.88 \si{\second} & 4.88 \si{\second} & 95.6 \si{\second} & 35.21 \si{\second}\\ 
+\end{tabular}
+\caption{Adjusted running times}
+\label{tab:fixedtimes}
+\end{table}
+
+\subsection{Per sample values}
+As seen in \fref{tab:avgcurrent}, io.js draws most current per sample, but just 0.01 \si{\ampere} more in most cases.
+But by referencing \fref{tab:iterpersample}, it is clear why it is higher than the other two, but still uses less energy per iteration, as \fref{tab:results} show.
+Because io.js executes the program much faster, a lot more iterations are done per sample.
+
+Comparing these results to the average energy drawn by the platforms when running no program, \fref{sec:basepower}, the percentage of the current drawn by the program is shown in \fref{tab:percentbyprogram}.
+This table shows that most of the energy consumed when running programs on the devices go to powering the device, which includes both the operating system and hardware on the device that uses energy, for example light emitting diodes (LEDs).
 
 
-Shift, tessel - why does it run so slow? Lua translation.
+\begin{table}[h!]
+\centering
+\begin{tabular}{c c}
+    \begin{tabular}{c A}
+    \multicolumn{2}{c}{Add}\\
+    Espruino &  7.58\%\\
+    io.js &  9.88\%\\
+    Tessel & 20.2\%
+    \end{tabular} &
+    
+    \begin{tabular}{c A}
+    \multicolumn{2}{c}{Multiplication} \\
+    Espruino &  7.58\%\\
+    io.js &  9.88\%\\
+    Tessel & 20.2\%
+    \end{tabular} \\
+& \\
+    \begin{tabular}{c A}
+    \multicolumn{2}{c}{Shift} \\
+    Espruino &  7.58\%\\
+    io.js &  9.88\%\\
+    Tessel & 26.0\%
+    \end{tabular} &
+    
+    \begin{tabular}{c A}
+    \multicolumn{2}{c}{Closure} \\
+    Espruino &  6.90\%\\
+    io.js &  10.4\%\\
+    Tessel & 24.7\%
+    \end{tabular}
+\end{tabular}
+\caption{Percentage of current drawn by program}
+\label{tab:percentbyprogram}
+\end{table}
 
-What amount of the measured power draw is from the platform. What also draws power? (wifi tessel, network raspberry pi)
+When running programs on the Tessel, more of the current drawn goes to the program, because the OS is specifically tailored to just running the programs.
+The OS on the Raspberry Pi is a generic system created for everyday use on the device.
+It supports a graphical user interface, and has many packages pre-installed.
+By changing to a more optimized OS, with less features enabled, the energy use could be lowered.
 
-Variance?
+\subsection{Energy use}
+Comparing the energy use of the Tessel and io.js, shown in \fref{tab:results}, it is clear that the scenario illustrated in \fref{fig:energyusetime} holds true.
+The energy used by running a program in io.js on a faster computer is lower than using Tessel on a slower one.
+That means if the need is to run the program using the least amount of energy, it is better to use io.js on the Raspberry Pi.
+But, as can be seen from \fref{sec:basepower}, if the faster device is running while the slower is finishing up, it will use more power overall.
+If the device cannot be powered down after it is done running, the energy saved while running the program will be for nothing.
+
+As seen by \citet{valluri01}, optimizing for speed will lead to lower energy use.
+By looking at \fref{tab:fixedtimes} and \fref{tab:results}, there is a lot to improve on the speed of both the Espruino on the Raspberry Pi and the Tessel.
+
+\section{Why is Espruino so slow?}
+With the goal of the Espruino project being to create a low power JavaScript embedded unit, it seems counter-intuitive that it uses so much energy when running on the Raspberry Pi.
+Seen from \fref{tab:results}, it is a power of magnitude worse than running io.js on the same platform.
+Why is this?
+
+When the Espruino executes code, it does so directly from the source, evaluating one expression at a time.
+With the entire program being a loop, this leads to a lot of time being put into parsing the program.
+After 1,000,000 iterations, this parsing can add up quite a lot.
+
+Additionally, the memory model of Espruino does not scale with many lookups.
+As it is using a linked list to store variables, doing a lot of variable arithmetic, as all the programs do, leads to more lookups in this list.
+
+Espruino, by it's design, cannot do optimizations, as it executes the code given to it.
+When developing code for the Espruino, one should take into account the limitations of the platform.
+It may not run all code fast, but code optimized for it should be better.
+A solution to run generic code faster on Espruino could be to add some software that optimizes the JavaScript code before running it.
+While fixing some problems, this runs counter to the goal of Espruino to give the developer the ability to debug JavaScript that is running on the device.
+
+An experiment that could be run to test this, is to manually optimize the programs, for instance unroll the loops a bit.
+Comparing the energy use of this optimized code against the full loop should show an improvement.
+
+\section{The Shift program on Tessel}
+\label{sec:shifttessel}
+When running the shift program on the Tessel, it needs a lot more time than any other program, and thus use a lot more power.
+To find out what is behind this, the code running must be analyzed.
+
+In \fref{lst:shifttrans}, the entire code generated by the Colony Compiler, the JavaScript to Lua compiler used by the Tessel, of the Shift program is shown.
+Comparing the code in the while loop with code generated for the Multiplication program, seen in \fref{lst:multtrans}, there is quite a large difference between how the operation is done in Lua.
+Lua does not have an operator for shift like JavaScript does, but the same behavior is available through the bit-module.
+To maintain control over what is global variables in the Tessel firmware, bit is renamed to \_bit, which is why this is used in when calling the shift operation.
+This means that the operation in line 8 of \fref{lst:shifttrans} is equivalent with the JavaScript operator.
+
+\begin{listing}[ht]
+\begin{minted}{lua}
+return function (_ENV, _module)
+local exports, module = _module.exports, _module;
+local i, a, b, c = i, a, b, c;
+--[[0]] i = (0); 
+while ((i)<((1000000))) do 
+--[[38]] a = (1); 
+--[[53]] b = (2); 
+--[[68]] c = _bit.lshift(_G.tointegervalue(a),_G.tointegervalue(b)); 
+local _r = i; i = _r + 1;
+end;
+return _module.exports;
+end 
+\end{minted}
+\caption{Lua code generated by the Colony Compiler for the Shift Program}
+\label{lst:shifttrans}
+\end{listing}
+
+\begin{listing}[ht]
+\centering
+\begin{minted}{lua}
+--[[35]] a = (1); 
+--[[47]] b = (2); 
+--[[59]] c = ((a)*(b)); 
+\end{minted}
+\caption{Lua code generated for the Multiplication program (excerpted)}
+\label{lst:multtrans}
+\end{listing}
+
+% http://www.ecma-international.org/ecma-262/5.1/#sec-11.7.1
+As the ECMAScript standard requires the values in a shift expression to be cast to integers, the compiler explicitly casts the values to integers. \citep[section 11.7.1]{ecmascript5}
+This casting is implemented in the framework, and can be seen in \fref{lst:tessel-lua-tointegervalue}.
+
+%sauce: https://github.com/tessel/t1-runtime/blob/dd434be5499ed04709d78a0eba497f908e2cc235/src/colony/lua/colony-init.lua#L43
+%sauce https://github.com/tessel/t1-runtime/blob/dd434be5499ed04709d78a0eba497f908e2cc235/src/colony/lua/colony-init.lua#L23
+\begin{figure}[h!]
+\begin{minipage}{0.45\textwidth}
+\begin{minted}{lua}
+_G.tointegervalue = function (val)
+  val = tonumber(js_toprimitive(val))
+  if val == nil then
+    return 0/0
+  else
+    return math.floor(val)
+  end
+end
+\end{minted}
+\captionof{listing}{tointegervalue from the Tessel runtime code}%\protect\footnotemark}
+\label{lst:tessel-lua-tointegervalue}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\begin{minted}{lua}
+local function js_toprimitive (val)
+  if type(val) == 'table' then
+    val = val:valueOf()
+    if type(val) == 'table' then
+      val = tostring(val)
+    end
+  end
+  return val
+end
+\end{minted}
+\captionof{listing}{js\_toprimitive from the Tessel runtime code}%\protect\footnotemark}
+\label{lst:tessel-lua-js-toprimitive}
+\end{minipage}
+\end{figure}
+
+%\footnotetext[1]{Source: \url{https://goo.gl/xwNXyZ\#L43}
+%\footnotetext[2]{Source: \url{https://goo.gl/xwNXyZ\#L23}
+\todo{fix reference}
+
+As seen, js\_toprimitive is called on the value, to ensure that Lua only tries to convert a primitive with number, and avoiding an error.
+The implementation of js\_toprimitive can be seen in \fref{lst:tessel-lua-js-toprimitive}.
+While all the function calls are built-in Lua functions in the end, adding extra instructions is hurting the performance.
+To do one bit shift instruction, two calls to tointegervalue is issued, and each of those calls js\_toprimitive once, for a total of 4 function calls in the framework code.
+Then add on the Lua built-in function calls, three per operand, as well as the two comparisons.
+Assuming only one instruction for each of those operations, which likely is a low estimate, 14 instructions are added to ensure type safety for the shift operation.
+
+A way to remove a lot of this overhead when executing, would be to let the compiler do optimizations to check if the operand is an integer at compile time, i.e. do constant folding.
+While this might hurt the compilation speed, the trade-off should be worth it to make the instruction faster, at least in some cases.
+
+But really there is no need for the compiler to do any type validation here.
+The implementation of JavaScript in colony tries to follow the JavaScript specification, and the shift implementation is exactly after the standard.
+But Lua, just as JavaScript, is a weakly typed language, which means that Lua also needs to ensure that the operands of the shift operation are integers, since it does not make sense to shift anything else.
+In the current implementation, the casting to integers are done twice, adding at least twice the amount of work needed.
+If the compiler had taken into account what the Lua interpreter does, much more energy could be saved.
+As this is seen in one expression here, it might hold true for other expressions implemented in the Tessel framework.
+By optimizing the compiler for creating better Lua code, energy could be saved.
+
+
+\section{What does current draw mean?}
+Why is measuring the current drawn interesting when investigating energy use of a computer?
+The power is a measurement of the amount of work done per second.
+When the computer gets more instructions to do, i.e. a program is started, the amount of work done increases.
+As the computer cannot generate energy from nothing, no known mechanism in the universe can, it needs to get the energy from other sources.
+The electric power formula,
+\[P = IV\]
+shows that to increase the power, either the current or the voltage have to increase.
+Since the power source keep the voltage constant, the only way for the device to increase the power is to draw more current.
+
+This means that the increase seen in current drawn when starting a program is corrensponding to the computer 
+
+\section{Variance and error}
+\todo{Write about variance, errors}
+
+\section{Documentation problems}
+
+\subsection{ptxdist on Giant Gecko}
+As mentioned in \fref{chap:chapter3}, the experiment was planned to be done on the Giant Gecko as well, using PTXdist as the Linux distribution.
+While setting up the distribution and installing it on the development board was easy enough, getting the software to run the experiments was much harder.
+
+The first thing tried was to download a pre-compiled version of io.js for ARMv7 architecture, which is provided from the official site.
+This was copied to the binary folder of the operating system on the Giant Gecko, and given running permissions.
+When io.js then was started through the shell access, an error occured, saying ``applet not found.''
+This seemed to be caused by \emph{Busybox}, a program that provides normal shell programs to minimal systems.
+Busybox tried to execute the command as it was a program provided by Busybox itself, but it could not find the program, since was not a Busybox applet.
+
+Thinking it probably had something to do with the binary itself, compiling the package locally was then tried.
+First there was problems with libraries that were not present, even though they were installed.
+To combat this, the explicit locations of the libraries were used when building, which fixed this issue.
+But when this compiled file was copied to the device, the same error as before was issued.
+
+Neither the documentation, nor any web searches yielded answers to what the problem was.
+When asking people associated with PTXdist, they could not answer to why this happened.
+A guess to what happens, is that Busybox somehow is invoked first when other programs are run.
+To then actually run programs that are not a part of Busybox, some setting that tells Busybox to not run its own applet must be set, but this is then not documented anywhere.
+
+Instead of wasting more time trying to get programs to run, it was decided to focus on the platforms that were already running, and let this be an example of how hard it actually is to use microcontrollers.
+
+\defcitealias{tessel2hardware}{Tessel 2 Hardware Overview}
+\subsection{Tessel runtime on Raspberry Pi}
+Another planned test to run, was to use the Tessel runtime on the Raspberry Pi.
+This would have allowed a better comparison between the platforms, where the actual \todo{forhold}ratio between the hardware could be found.
+But the Raspbian linux distribution has not been updated since \todo{when?}, due to the Raspberry Pi 1 having an ARMv6 processor instead of ARMv7 that Debian supports natively.
+This causes a lot of the dependencies for building the Tessel runtime to be out of date, and making the build process hard to complete.
+Not being the primary target for the Runtime, and as the Raspberry Pi is a slow development platform, there exists no documentation on how to fix the dependency issues.
+
+The Raspberry Pi 2, just released this spring, has an ARMv7 processor, which the standard Debian distribution supports.\citepalias{tessel2hardware}
+With the new hardware then, up to date packages built for the Debian ARM distribution will become available. 
+After updating the dependencies, the build process should be no problem.
+
+\section{Error in logged measurements}
+When analyzing the data from the Keysight Benchvue application, a bug showed itself.
+For some data sets, when manipulating the time stamps of the measurements, many of the samples were not included.
+Graphing these data, there was an arbitrary cut of time in these data sets.
+Looking at the data, it was clear that the data formats were in 12 hour format, where the hour field went from 01 to 12, and then back to 01.
+When some of the experiments went on through either noon or midnight, the continuity of the samples were broken.
+
+To fix this, the affected lines in the result files were changed using a simple search and replace tool.
+As only the hour field needed to be replaced, and the theoretical maximum strings that needed to be changed was 12, this was not automated, but simply carried out for each data set that needed.
+There should be no issue with the results because of these edits.
+
+There might be some settings in the application to use a 24 hour clock when writing the time stamps.
+But as the solution described above was satisfactory, it was decided to not throw away the data already acquired.
