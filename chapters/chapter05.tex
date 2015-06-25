@@ -23,10 +23,10 @@ This section compares the results of the different platforms, through the runnin
 
 \subsection{Running time}
 Execution time on the Raspberry Pi is 3.89 times faster than on the Tessel, as the Raspberry Pi's clock runs that much faster.
-Adjusting \fref{tab:timedruns} for this, the conjectured running times of the programs on the Tessel if the hardware was as powerful as the Raspberry Pi are shown in \fref{tab:fixedtimes}.
+Adjusting \cref{tab:timedruns} on \cpageref{tab:timedruns} for this, the conjectured running times of the programs on the Tessel if the hardware was as powerful as the Raspberry Pi are shown in \cref{tab:fixedtimes}.
 As can be seen, the Tessel speed of the Addition and Multiplication program is comparable with the io.js version.
-\Fref{lst:multtrans} shows that the JavaScript operation is translated directly to the equivalent Lua operation, making the program run very efficient.
-The reason for the huge performance loss in the shift program is described in \fref{sec:shifttessel}.
+\Cref{lst:multtrans} shows that the JavaScript operation is translated directly to the equivalent Lua operation, making the program run very efficient.
+The reason for the huge performance loss in the shift program is described in \cref{sec:shifttessel}.
 
 The Closure program uses a longer time on each platform, due to a function not being represented by a single instruction.
 As the V8 engine behind io.js includes JIT compilation, a lot of the extra work that a closure needs can be optimized.
@@ -47,11 +47,11 @@ As the V8 engine behind io.js includes JIT compilation, a lot of the extra work 
 \end{table}
 
 \subsection{Per sample values}
-As seen in \fref{tab:avgcurrent}, io.js draws most current per sample, but just 0.01 \si{\ampere} more in most cases.
-But by referencing \fref{tab:iterpersample}, it is clear why it is higher than the other two, but still uses less energy per iteration, as \fref{tab:results} show.
+As seen in \cref{tab:avgcurrent}, io.js draws most current per sample, but just 0.01 \si{\ampere} more in most cases.
+But by referencing \cref{tab:iterpersample}, it is clear why it is higher than the other two, but still uses less energy per iteration, as \cref{tab:results} show.
 Because io.js executes the program much faster, a lot more iterations are done per sample.
 
-Comparing these results to the average energy drawn by the platforms when running no program, \fref{sec:basepower}, the percentage of the current drawn by the program is shown in \fref{tab:percentbyprogram}.
+Comparing these results to the average energy drawn by the platforms when running no program, \cref{sec:basepower}, the percentage of the current drawn by the program is shown in \cref{tab:percentbyprogram}.
 This table shows that most of the energy consumed when running programs on the devices go to powering the device, which includes both the operating system and hardware on the device that uses energy, for example light emitting diodes (LEDs).
 
 
@@ -96,18 +96,18 @@ It supports a graphical user interface, and has many packages pre-installed.
 By changing to a more optimized OS, with less features enabled, the energy use could be lowered.
 
 \subsection{Energy use}
-Comparing the energy use of the Tessel and io.js, shown in \fref{tab:results}, it is clear that the scenario illustrated in \fref{fig:energyusetime} holds true.
+Comparing the energy use of the Tessel and io.js, shown in \cref{tab:results}, it is clear that the scenario illustrated in \cref{fig:energyusetime} holds true.
 The energy used by running a program in io.js on a faster computer is lower than using Tessel on a slower one.
 That means if the need is to run the program using the least amount of energy, it is better to use io.js on the Raspberry Pi.
-But, as can be seen from \fref{sec:basepower}, if the faster device is running while the slower is finishing up, it will use more power overall.
+But, as can be seen from \cref{sec:basepower}, if the faster device is running while the slower is finishing up, it will use more power overall.
 If the device cannot be powered down after it is done running, the energy saved while running the program will be for nothing.
 
 As seen by \citet{valluri01}, optimizing for speed will lead to lower energy use.
-By looking at \fref{tab:fixedtimes} and \fref{tab:results}, there is a lot to improve on the speed of both the Espruino on the Raspberry Pi and the Tessel.
+By looking at \cref{tab:fixedtimes} and \cref{tab:results}, there is a lot to improve on the speed of both the Espruino on the Raspberry Pi and the Tessel.
 
 \section{Why is Espruino so slow?}
 With the goal of the Espruino project being to create a low power JavaScript embedded unit, it seems counter-intuitive that it uses so much energy when running on the Raspberry Pi.
-Seen from \fref{tab:results}, it is a power of magnitude worse than running io.js on the same platform.
+Seen from \cref{tab:results}, it is a power of magnitude worse than running io.js on the same platform.
 Why is this?
 
 When the Espruino executes code, it does so directly from the source, evaluating one expression at a time.
@@ -131,11 +131,11 @@ Comparing the energy use of this optimized code against the full loop should sho
 When running the shift program on the Tessel, it needs a lot more time than any other program, and thus use a lot more power.
 To find out what is behind this, the code running must be analyzed.
 
-In \fref{lst:shifttrans}, the entire code generated by the Colony Compiler, the JavaScript to Lua compiler used by the Tessel, of the Shift program is shown.
-Comparing the code in the while loop with code generated for the Multiplication program, seen in \fref{lst:multtrans}, there is quite a large difference between how the operation is done in Lua.
+In \cref{lst:shifttrans}, the entire code generated by the Colony Compiler, the JavaScript to Lua compiler used by the Tessel, of the Shift program is shown.
+Comparing the code in the while loop with code generated for the Multiplication program, seen in \cref{lst:multtrans}, there is quite a large difference between how the operation is done in Lua.
 Lua does not have an operator for shift like JavaScript does, but the same behavior is available through the bit-module.
 To maintain control over what is global variables in the Tessel firmware, bit is renamed to \_bit, which is why this is used in when calling the shift operation.
-This means that the operation in line 8 of \fref{lst:shifttrans} is equivalent with the JavaScript operator.
+This means that the operation in line 8 of \cref{lst:shifttrans} is equivalent with the JavaScript operator.
 
 \begin{listing}[ht]
 \begin{minted}{lua}
@@ -169,7 +169,7 @@ end
 
 % http://www.ecma-international.org/ecma-262/5.1/#sec-11.7.1
 As the ECMAScript standard requires the values in a shift expression to be cast to integers, the compiler explicitly casts the values to integers. \citep[section 11.7.1]{ecmascript5}
-This casting is implemented in the framework, and can be seen in \fref{lst:tessel-lua-tointegervalue}.
+This casting is implemented in the framework, and can be seen in \cref{lst:tessel-lua-tointegervalue}.
 
 %sauce: https://github.com/tessel/t1-runtime/blob/dd434be5499ed04709d78a0eba497f908e2cc235/src/colony/lua/colony-init.lua#L43
 %sauce https://github.com/tessel/t1-runtime/blob/dd434be5499ed04709d78a0eba497f908e2cc235/src/colony/lua/colony-init.lua#L23
@@ -210,7 +210,7 @@ end
 \todo{fix reference}
 
 As seen, js\_toprimitive is called on the value, to ensure that Lua only tries to convert a primitive with number, and avoiding an error.
-The implementation of js\_toprimitive can be seen in \fref{lst:tessel-lua-js-toprimitive}.
+The implementation of js\_toprimitive can be seen in \cref{lst:tessel-lua-js-toprimitive}.
 While all the function calls are built-in Lua functions in the end, adding extra instructions is hurting the performance.
 To do one bit shift instruction, two calls to tointegervalue is issued, and each of those calls js\_toprimitive once, for a total of 4 function calls in the framework code.
 Then add on the Lua built-in function calls, three per operand, as well as the two comparisons.
@@ -238,15 +238,15 @@ The electric power formula,
 shows that to increase the power, either the current or the voltage have to increase.
 Since the power source keep the voltage constant, the only way for the device to increase the power is to draw more current.
 
-This means that the increase seen in current drawn when starting a program is corrensponding to the computer 
+This means that the increase seen in current drawn when starting a program is corresponding to the increased work done by the computer.
 
-\section{Variance and error}
-\todo{Write about variance, errors}
+% \section{Variance and error}
+
 
 \section{Documentation problems}
 
 \subsection{ptxdist on Giant Gecko}
-As mentioned in \fref{chap:chapter3}, the experiment was planned to be done on the Giant Gecko as well, using PTXdist as the Linux distribution.
+As mentioned in \cref{chap:chapter3}, the experiment was planned to be done on the Giant Gecko as well, using PTXdist as the Linux distribution.
 While setting up the distribution and installing it on the development board was easy enough, getting the software to run the experiments was much harder.
 
 The first thing tried was to download a pre-compiled version of io.js for ARMv7 architecture, which is provided from the official site.

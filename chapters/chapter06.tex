@@ -5,35 +5,39 @@
 \chapter{Conclusion}
 \label{chap:chapter6}
 
-The tessel compiler can be optimized.
+By the discussion in \cref{sec:shifttessel}, it can be concluded that the Colony Compiler which translates JavaScript to Lua in the Tessel framework, can save a lot of wasted energy.
+Firstly, by outputting Lua code that does not have to do more work than necessary, and secondly, by utilizing some common compiler optimizations.
 
-Code need to be tailored to Espruino
+An optimizer for the Espruino VM, outputting JavaScript code optimized for the special needs the framework has, could lower the energy use on the platform.
+But this is only necessary if there is a need to run standard JavaScript programs.
+If new programs are to be developed for the platform, these limitations should be taken into account to save energy.
 
-Focus on speed in implementations
+If the goal is to use less energy on a platform, one field to look at is to minimize the power used by the operating system.
+\Cref{tab:percentbyprogram} show that most of the power used is by the OS, even on the Tessel, which has a device specific OS.
 
-Energy can be saved by improving the OS.
+As the JavaScript engine that uses the least amount of power per iteration in the experiment is the fastest one, this suggest that by optimizing for speed, one at the same time optimizes for lower energy use.
+Together with basis in the literature, the recommendation of this thesis is to focus the design of embedded frameworks to execute faster to lower the power consumption.
+
+With the news that Tessel 2, released in the fall of 2015, will use io.js under a Linux operating system, a conclusion from this thesis is that it might not hurt the power consumption of the device compared to the Tessel 1.
+
 
 \section{Future work}
-Run more tests with more instructions.
+After the research in this paper, more tests are warranted.
+As the energy use of the different expressions tested varied as much as it did, it would be interesting to test more operations on the different platforms.
+With the Tessel implementation shown to be not optimal, further tests of other operations could find other implementations that can be improved.
 
-Run similar tests with more advanced programs.
+To confirm the suggestion that compiler optimizations might help lower power usage, tests on the platforms using the optimizations laid out in \cref{sec:benchmarkdiscussion} could be done.
 
-Test tessel 2 when it comes out.
-
-Test on Raspberry Pi 2
-
-Run optimized benchmarks as laid out in \fref{sec:benchmarkdiscussion}
-
-\subsection{Experiment automation on the Tessel}
 Another way of automating the experiments on the Tessel than what was done, would be to connect it to a computer using another modified USB cable.
 A USB cable carries it signal through four cable, two are for Vcc and ground, while the last two are for the data connection.
-(There actually is a fifth cable in newer cables that can be used for control, but it is optional.)
 There should be no problem in powering the device from an external power supply, as done in the experiment, and at the same time delivering data from a computer.
 
 The benefits of this, is to get the same control over the programs run as through the shell of the Raspberry Pi.
 This would remove the need for resetting the Tessel from the software itself, making it easier to see where the program runs in the sample data.
 
-\todo{cite usb docs}However, there is no guarantee for this to work, as it is undocumented in the specification.
+However, there is no guarantee for this to work, as it is undocumented in the specification.
 There should be no connection between the power and data lines when using a USB cable, but implementations might vary.
-This needs to be tested to be done, and because of timing limitations in this project, the solution described in \fref{chap:chapter3} was decided to be good enough.
+This needs to be tested to be done, and because of timing limitations in this project, the solution described in \cref{chap:chapter3} was decided to be good enough.
 
+With both the Raspberry Pi 2 and the Tessel 2 being released in 2015, the experiment done in this project could be tested on those platforms as well.
+In addition, testing the Espruino Pico hardware in the same way could yield interesting results with comparing to a truly low power device.

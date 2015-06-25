@@ -55,7 +55,7 @@ When compiling anything but a trivial program, there is a huge amount of correct
 This means that there will most likely be added more instructions after a compiler pass compared to writing the assembly code by hand.
 In the case of interpretation, the interpreter running on the computer by definition adds extra instructions. 
 On the other hand, adding automated passes of the code allows for some optimization techniques.
-These will be explored in \fref{chap:chapter2}
+These will be explored in \cref{chap:chapter2}
 
 \section{JavaScript}
 \todo{citealias}
@@ -108,7 +108,7 @@ PE = \sum_{1}^{n}E_{i} + \sum_{1}^{n-1}O_{i,i+1} + \sum\epsilon
 \label{eq:kavvadiasmodel}
 \end{equation}
 
-Shown in \fref{eq:kavvadiasmodel}, where $E_i$ is the energy consumed during the execution of instruction i, $O_{i,j}$ is the interinstruction cost of instructions i and j, and $\epsilon$ is the cost of a pipeline stall.
+Shown in \cref{eq:kavvadiasmodel}, where $E_i$ is the energy consumed during the execution of instruction i, $O_{i,j}$ is the interinstruction cost of instructions i and j, and $\epsilon$ is the cost of a pipeline stall.
 This shows that reducing either the number of pipeline stalls or the number of instructions in the program will reduce the energy consumed by the program.
 
 In other research done in the same field, \citet{valluri01} found that compiler optimizations done for speed positively affected energy use.
@@ -125,7 +125,7 @@ While the hardware platforms tested in this thesis does not support parallel exe
 
 
 \section{Outline of this thesis}
-Chapter \ref{chap:chapter2} (page \pageref{chap:chapter2}) goes deeper into what can be done to create an energy efficient embedded device.
-In chapter \ref{chap:chapter3} (page \pageref{chap:chapter3}) the method of the experiment is explained, together with the rationale behind the experiment.
-The results of the this experiment is presented in chapter \ref{chap:chapter4} (page \pageref{chap:chapter4}), and these are discussed in chapter \ref{chap:chapter5} (page \pageref{chap:chapter5}).
-Concluding remarks are added in chapter \ref{chap:chapter6} (page \pageref{chap:chapter6}).
+\Cref{chap:chapter2} (\cpageref{chap:chapter2}) goes deeper into what can be done to create an energy efficient embedded device.
+In \cref{chap:chapter3} (\cpageref{chap:chapter3}) the method of the experiment is explained, together with the rationale behind the experiment.
+The results of the this experiment is presented in \cref{chap:chapter4} (\cpageref{chap:chapter4}), and these are discussed in \cref{chap:chapter5} (\cpageref{chap:chapter5}).
+Concluding remarks are added in \cref{chap:chapter6} (\cpageref{chap:chapter6}).

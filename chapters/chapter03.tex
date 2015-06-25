@@ -20,7 +20,7 @@ This means that it is not the exact numbers that are of interest, but rather the
 \section{Benchmarks}
 Four programs were used as benchmarks on each tested platform, all following a similar pattern: In a loop repeated 1,000,000 times, an expression is evaluated.
 The programs are named after the expression used in it, testing various JavaScript features; namely Addition, Multiplication, Closure, and Left shift.
-The addition program can be seen in \fref{lst:add}, and the multiplication program in \fref{lst:multi}.
+The addition program can be seen in \cref{lst:add}, and the multiplication program in \cref{lst:multi}.
 The expression evaluated in these two are basic instructions, which virtually every language contains.
 
 \begin{figure}[h!]
@@ -72,13 +72,13 @@ for(var i = 0; i < 1000000; i++) {
 \end{minipage}
 \end{figure}
 
-In \fref{lst:shift}, the Left shift program is shown.
+In \cref{lst:shift}, the Left shift program is shown.
 Like the addition and multiplication program, it consists of a single expression, a left shift.
 To left shift \emph{a} by \emph{b} is to add b zeros to the end of a's binary representation.
 For example:
 \[1_{10} << 2_{10} = 1_{2} << 10_{2} = 100_{2} = 4_{10}\]
 
-The Closure program, seen in \fref{lst:closure}, evaluates a \emph{closure}, which accesses a global variable.
+The Closure program, seen in \cref{lst:closure}, evaluates a \emph{closure}, which accesses a global variable.
 A closure is a concept often used in JavaScript programs, where an unnamed local function is evaluated where it is defined.
 In this example it may seem trivial, but as JavaScript only has a scope per function, closures are an important tool to not clutter the global scope.
 And with the single threaded nature of the language, as well as its higher order, closures are an important flow control concept in applications.
@@ -121,7 +121,7 @@ Flash       & SD-card       & 32 MB\\
 \todo{sources on specs of Raspberry Pi}
 
 
-As can be gathered from \fref{tab:specs}, the Raspberry Pi is a much faster machine than the Tessel, clocked at almost 4 times higher, and with 16 times the amount of RAM.
+As can be gathered from \cref{tab:specs}, the Raspberry Pi is a much faster machine than the Tessel, clocked at almost 4 times higher, and with 16 times the amount of RAM.
 This means that the Raspberry Pi is able to run much larger software and do it faster, but also that it will use more power.
 
 \subsection{Silicon Labs EFM32 Giant Gecko}
@@ -141,20 +141,23 @@ Flash & 1024 KB
 \end{table}
 
 When developing the experiment, another hardware platform was intended to be tested.
-The Giant Gecko from Silicon Labs is a microcontroller created for low energy use cases, which is described in \fref{sec:hwenergy}.
+The Giant Gecko from Silicon Labs is a microcontroller created for low energy use cases, which is described in \cref{sec:hwenergy}.
 \todo{better}To develop on the platform, the development board EFM32GG-DK3750 was used.
-It uses the CPU which is described in \fref{tab:ggkeydata}.
+It uses the CPU which is described in \cref{tab:ggkeydata}.
 It is a much less powerful device than both the Tessel and the Raspberry Pi, clocked at a third of the Tessel, and containing a small fraction of the memory available on the other platforms.
 
 \section{Software Platforms}
 \subsection{Tessel}
 \defcitealias{newengine}{A New Engine For Your Tessel, 2014}
 \defcitealias{movingfaster}{Moving Faster With io.js, 2015}
+\defcitealias{aboutlua}{About Lua}
 
 Tessel\footnote{https://tessel.io}, developed by Technical Machine, is a project created for offering software developers a platform for developing hardware for the first time.
 It consists of both a hardware platform, described above, and a software platform.
 This software platform includes a runtime for the hardware, interpreting the code, a command line interface to easily run programs, and a compiler.
-Instead of interpreting JavaScript, Tessel compiles it to Lua, and interprets the Lua code on the device. \todo{Lua}
+Instead of interpreting JavaScript, Tessel compiles it to Lua, and interprets the Lua code on the device.
+
+\emph{Lua} is another programming language, designed to be fast and lightweight, and is easily embeddable. In many ways, it is similar to JavaScript, so a translation from JavaScript to Lua is not very difficult. There exists two main implementations of Lua, the official interpreter, and LuaJIT, a highly optimized just-in-time compilator and virtual machine.\citepalias{aboutlua}
 
 One of the rationales behind choosing Lua as the intermediate language was that Lua has a low memory profile and is easy to embed.
 The alternative when Tessel was first envisioned, was using the V8 engine, in the same way io.js do.
@@ -270,8 +273,8 @@ And adding this blocks up, the energy consumed of one program run was found.
 The average of these sums was then the average power usage of one experiment.
 
 To get similar data from the Tessel, the current readings through the reset procedure needed to be stripped away.
-As these were not as clear to where started and ended as the dips in the Raspberry Pi, as seen in \fref{fig:multtes}, this was not as easy.
-Instead of filtering the data below a threshold, the time data is used to remove the samples after each program has been run, using the approximate running times in \fref{tab:timedruns}, and the timed reset at 12.8 \si{\second}.
+As these were not as clear to where started and ended as the dips in the Raspberry Pi, as seen in \cref{fig:multtes}, this was not as easy.
+Instead of filtering the data below a threshold, the time data is used to remove the samples after each program has been run, using the approximate running times in \cref{tab:timedruns}, and the timed reset at 12.8 \si{\second}.
 Then the samples kept were used in the same manner as for the Raspberry Pi programs.
 
 To show current data for a single iteration in the loop, this sum was divided by 1,000,000, giving the current drawn per iteration.
